@@ -49,10 +49,10 @@ const api = ref<ApiTypes[]>([
       categories: ['comedy', 'usa'],
     },
     cover:
-      'https://occ-0-2508-1433.1.nflxso.net/dnm/api/v6/6gmvu2hxdfnQ55LZZjyzYR4kzGk/AAAABRGUPy-pgdIo-q-L-R3lD-0W894FM61cRpBM_pXZM72hL8Hp58SjPsqH1_9mMGOnqJOoZls5FseGwPH9TZPllb5vOoCMExOBnck.webp?r=7e2',
+      'https://fiocondutor.com.pt/wp-content/uploads/2022/07/pulp_banner.jpeg',
     year: 1994,
     maturityRating: 16,
-    description: 'Desc',
+    description: 'Jedyny w swoim rodzaju kryminał, w którym splatają się historie cyngla, jego filozofującego partnera oraz przegranego boksera.',
     key: 'pulp-fiction',
   },
   {
