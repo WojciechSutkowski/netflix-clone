@@ -9,16 +9,17 @@ const standup = defineProps<{
 
 const closeModal = () =>{
   const id = `#${standup.data.key}`
-    // console.log(id);
+  const overlay = document.querySelector('.overlay');
   const el = document.querySelector(id);
     console.log(el);
     el?.classList.add('hide')
+    overlay?.classList.add('hide')
 }
 
 </script>
 
 <template>
-  <div style="background-color: blue">
+  <dialog class="modal">
     <h2>{{ standup.data.title }}</h2>
     <p>{{ standup.data.year }}</p>
     <p>+{{ standup.data.maturityRating }}</p>
@@ -33,7 +34,24 @@ const closeModal = () =>{
     <p>
       {{ timeConverter(standup.data.type.time) }}
     </p>    <button @click="closeModal">Close</button>
-  </div>
+  </dialog>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+
+  background-color: white;
+  padding: 6rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.cover {
+  width: 40rem;
+}</style>
