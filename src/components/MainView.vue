@@ -7,7 +7,7 @@ import {
   MovieApiTypes,
   SeriesApiTypes,
   StandupApiTypes,
-} from '../types/apiTypes'
+} from '@/types/apiTypes'
 import { onMounted, ref } from 'vue'
 
 const getItem = <T>(T: string) =>
@@ -17,19 +17,20 @@ const movies = ref(getItem<MovieApiTypes>('Movie'))
 const series = ref(getItem<SeriesApiTypes>('Series'))
 const standups = ref(getItem<StandupApiTypes>('Standup'))
 
-const modal = (e: string) => {
-  const id = `#${e}`
-  console.log(id)
+const modal = (el: string) => {
+  const id = `#${el}`
+  const element = document.querySelector(id) as HTMLElement
+  element.style.top = '50px'
+  element.classList.remove('hide')
 
-  const overlay = document.querySelector('.overlay')
-  const el = document.querySelector(id)
-  console.log(el)
-  el?.classList.remove('hide')
-  overlay?.classList.remove('hide')
+  const overlay = document.querySelector('.overlay') as HTMLElement
+  overlay.classList.remove('hide')
+
+  window.scrollTo(0, 0)
 }
 
 onMounted(() => {
-  const sectionHeroEl = document.querySelector('.nav-container') as Element
+  const sectionHeroEl = document.querySelector('.nav-container') as HTMLElement
   const obs = new IntersectionObserver(
     function (entries) {
       const ent = entries[0]
@@ -85,11 +86,6 @@ onMounted(() => {
           <li class="nav__primary--option"><a href="#movies">Filmy</a></li>
           <li class="nav__primary--option"><a href="#series">Seriale</a></li>
           <li class="nav__primary--option"><a href="#standups">Programy</a></li>
-          <li class="nav__primary--option"><a href="#">Nowe i popularne</a></li>
-          <li class="nav__primary--option"><a href="#">Moja lista</a></li>
-          <li class="nav__primary--option">
-            <a href="#">Przeglądaj wg języka</a>
-          </li>
         </ul>
       </nav>
     </div>
@@ -108,7 +104,7 @@ onMounted(() => {
             <ion-icon name="play"></ion-icon>
             <p>Odtwórz</p>
           </button>
-          <button class="button button__dark">
+          <button class="button button__dark" @click="modal('pulp-fiction')">
             <ion-icon name="information-circle-outline"></ion-icon>
             <p>Więcej informacji</p>
           </button>
@@ -128,23 +124,9 @@ onMounted(() => {
           <ion-icon name="chevron-back-outline"></ion-icon>
         </div>
         <div class="list__carousel--wrapper">
-          <li
-            class="list__element"
-            v-for="(el, index) in movies"
-            v-show="index < 6"
-          >
-            <div
-              class="list__element__card"
-              id="movies-1"
-              v-if="index >= 0 && index < 6"
-            >
-              <img class="list__img" :src="el.cover" @click="modal(el.key)" />
-              <MovieComponent :id="`${el.key}`" :data="el" class="hide" />
-            </div>
-            <div id="movies-2" v-if="index >= 6">
-              <img class="list__img" :src="el.cover" @click="modal(el.key)" />
-              <MovieComponent :id="`${el.key}`" :data="el" class="hide" />
-            </div>
+          <li class="list__element" v-for="el in movies">
+            <img class="list__img" :src="el.cover" @click="modal(el.key)" />
+            <MovieComponent :id="`${el.key}`" :data="el" class="hide" />
           </li>
         </div>
         <div class="btn-arrow btn-arrow__right">
@@ -160,19 +142,9 @@ onMounted(() => {
           <ion-icon name="chevron-back-outline"></ion-icon>
         </div>
         <div class="list__carousel--wrapper">
-          <li
-            class="list__element"
-            v-for="(el, index) in series"
-            v-show="index < 6"
-          >
-            <div id="series-1" v-if="index >= 0 && index < 6">
-              <img class="list__img" :src="el.cover" @click="modal(el.key)" />
-              <SeriesComponent :id="`${el.key}`" :data="el" class="hide" />
-            </div>
-            <div id="series-2" v-if="index >= 6">
-              <img class="list__img" :src="el.cover" @click="modal(el.key)" />
-              <SeriesComponent :id="`${el.key}`" :data="el" class="hide" />
-            </div>
+          <li class="list__element" v-for="el in series">
+            <img class="list__img" :src="el.cover" @click="modal(el.key)" />
+            <SeriesComponent :id="`${el.key}`" :data="el" class="hide" />
           </li>
         </div>
         <div class="btn-arrow btn-arrow__right">
@@ -188,19 +160,9 @@ onMounted(() => {
           <ion-icon name="chevron-back-outline"></ion-icon>
         </div>
         <div class="list__carousel--wrapper">
-          <li
-            class="list__element"
-            v-for="(el, index) in standups"
-            v-show="index < 6"
-          >
-            <div id="standups-1" v-if="index >= 0 && index < 6">
-              <img class="list__img" :src="el.cover" @click="modal(el.key)" />
-              <StandupComponent :id="`${el.key}`" :data="el" class="hide" />
-            </div>
-            <div id="standups-2" v-if="index >= 6" hidden>
-              <img class="list__img" :src="el.cover" @click="modal(el.key)" />
-              <StandupComponent :id="`${el.key}`" :data="el" class="hide" />
-            </div>
+          <li class="list__element" v-for="el in standups">
+            <img class="list__img" :src="el.cover" @click="modal(el.key)" />
+            <StandupComponent :id="`${el.key}`" :data="el" class="hide" />
           </li>
         </div>
         <div class="btn-arrow btn-arrow__right">
@@ -208,10 +170,13 @@ onMounted(() => {
         </div>
       </ul>
     </section>
+
     <footer class="footer">
       <div class="footer__grid">
         <div class="footer__socials">
-          <a href="#"><ion-icon id="fb-icon" name="logo-facebook"></ion-icon></a>
+          <a href="#"
+            ><ion-icon id="fb-icon" name="logo-facebook"></ion-icon
+          ></a>
           <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
           <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
           <a href="#"><ion-icon name="logo-youtube"></ion-icon></a>
@@ -228,60 +193,14 @@ onMounted(() => {
         <a class="footer__link" href="#">Ustawienia plików cookie</a>
         <a class="footer__link" href="#">Informacje o firmie</a>
         <a class="footer__link" href="#">Skontaktuj się z nami</a>
-        <div class="footer__copy">&copy; 2023 by Wojciech Sutkowski
-            </div>
+        <div class="footer__copy">&copy; 2023 by Wojciech Sutkowski</div>
       </div>
     </footer>
   </main>
-  <div class="overlay hide"></div>
+  <div class="overlay hide" />
 </template>
 
 <style lang="scss" scoped>
-.main {
-  z-index: 500;
-  margin-top: -30rem;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 3.6rem;
-}
-.button {
-  border: none;
-  border-radius: 3px;
-  padding: 1.2rem 3.4rem 1.2rem 2.8rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 2.6rem;
-  line-height: 2.4rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.1s;
-
-  ion-icon {
-    height: 1.4em;
-    width: 1.4em;
-  }
-
-  &__light {
-    background-color: white;
-    color: black;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.75);
-    }
-  }
-
-  &__dark {
-    background-color: rgba(109, 109, 110, 0.7);
-    color: white;
-
-    &:hover {
-      background-color: rgba(109, 109, 110, 0.4);
-    }
-  }
-}
-
 a:link,
 a:visited {
   color: #e5e5e5;
@@ -293,54 +212,6 @@ a:hover,
 a:active {
   color: #b3b3b3;
 }
-
-.nav-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 6rem;
-  width: 100%;
-  padding-right: 1.4rem;
-}
-.nav {
-  text-align: center;
-  width: 100%;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  padding: 1.6rem 6rem;
-  transition: 0.4s;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 10%, transparent);
-
-  &__logo {
-    position: relative;
-    padding-top: 0.2rem;
-    margin-right: 1.6rem;
-
-    &--img {
-      max-width: 10rem;
-    }
-  }
-
-  &__primary {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    font-size: 1.4rem;
-
-    &--option {
-      margin-left: 2rem;
-    }
-  }
-}
-
-.sticky .nav {
-  position: fixed;
-  z-index: 3;
-  background-color: #141414;
-}
-
 .hero {
   display: flex;
   align-items: center;
@@ -428,6 +299,60 @@ a:active {
     }
   }
 }
+.nav-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 6rem;
+  width: 100%;
+  padding-right: 1.4rem;
+}
+.nav {
+  text-align: center;
+  width: 100%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 1.6rem 6rem;
+  transition: 0.4s;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 10%, transparent);
+
+  &__logo {
+    position: relative;
+    padding-top: 0.2rem;
+    margin-right: 1.6rem;
+
+    &--img {
+      max-width: 10rem;
+    }
+  }
+
+  &__primary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+
+    &--option {
+      margin-left: 2rem;
+    }
+  }
+}
+
+.sticky .nav {
+  position: fixed;
+  z-index: 4;
+  background-color: #141414;
+}
+
+.main {
+  margin-top: -30rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 3.6rem;
+}
 
 .hide {
   display: none;
@@ -444,15 +369,13 @@ a:active {
     font-weight: 500;
     color: #fff;
     padding-left: 6rem;
-    z-index: 4;
+    z-index: 3;
   }
 
   &__carousel {
     width: 100vw;
     display: flex;
     justify-content: space-between;
-    z-index: 4;
-    // position: relative;
 
     &--wrapper {
       display: flex;
@@ -461,11 +384,10 @@ a:active {
     }
   }
 
-  &__element {
-    cursor: pointer;
-  }
-
   &__img {
+    cursor: pointer;
+    position: relative;
+    z-index: 3;
     width: 28rem;
     border-radius: 4px;
   }
@@ -484,17 +406,19 @@ a:active {
     width: 96rem;
     font-size: 1.2rem;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 2fr repeat(3,1fr) 2fr;
+    grid-template-rows: 2fr repeat(3, 1fr) 2fr;
   }
 
-  &__link:link, &__link:visited{
+  &__link:link,
+  &__link:visited {
     color: grey;
     padding: 0.4rem 0;
   }
 
-  &__link:hover, &__link:active{
+  &__link:hover,
+  &__link:active {
     text-decoration: underline;
-}
+  }
 
   &__socials {
     color: #fff;
@@ -515,19 +439,7 @@ a:active {
 
 .btn-arrow {
   width: 6rem;
-  font-size: 4.8rem;
-  color: white;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  transition: 0.2s;
 
-  &:hover {
-    cursor: pointer;
-    font-size: 6rem;
-  }
-  &__left {
-  }
   &__right {
     margin-right: 1.2rem;
   }
@@ -541,6 +453,6 @@ a:active {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
-  z-index: 5;
+  z-index: 4;
 }
 </style>

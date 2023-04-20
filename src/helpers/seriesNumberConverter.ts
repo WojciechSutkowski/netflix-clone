@@ -4,6 +4,6 @@ export const seriesNumberConverter = (seasons: number) => {
   } else if(seasons > 1 && seasons < 5) {
     return `${seasons} sezony`
   } else {
-    `${seasons} sezonów`
+    return `${seasons} sezonów`
   }
 };

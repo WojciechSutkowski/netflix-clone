@@ -35,5 +35,4 @@ export type Episode = {
   episodeNumber: number;
   title: string;
   time: number;
-  cover: string;
 }
